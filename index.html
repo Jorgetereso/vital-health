@@ -363,32 +363,18 @@ function show(id){
 function renderCurrent(){ const s=SECTIONS.find(s=>s.id===CUR); if(s) s.render(); }
 
 /* ---------- TODAY ---------- */
-const CHECK_ITEMS=[
-  {k:'supps',t:'Tomé mis suplementos',ic:'💊'},
-  {k:'water',t:'Tomé suficiente agua',ic:'💧'},
-  {k:'move',t:'Me moví / entrené',ic:'🏃'},
-  {k:'sleep',t:'Dormí bien',ic:'😴'},
-  {k:'meals',t:'Comí saludable',ic:'🥗'},
-];
 function renderToday(){
   const el=document.getElementById('v-today');
   const {score}=healthScore();
   const p=S.profile; const a=age(p.birthDate);
-  const today=todayISO(); const ci=S.checkins[today]||{};
   const sinceLast=(arr,key='date')=>{const ds=arr.map(x=>daysUntil(x[key])).filter(d=>d!=null);return ds.length?-Math.max(...ds):null;};
   const nudges=[];
-  // hard-empty prompts
+  // SOLO cosas importantes/ocasionales — nada diario (lo diario llega del reloj / Apple Health)
   if(!p.birthDate||!p.heightCm||!p.weightKg) nudges.push({ic:'👤',t:'Completá tu perfil',d:'Edad, altura, peso, grupo sanguíneo',act:`openProfile()`});
-  if(!latestVital('bp_sys')) nudges.push({ic:'🩺',t:'Cargá tu presión arterial',d:'Aún no registraste presión',act:`openForm('bp')`});
   if(!S.labs.length) nudges.push({ic:'🩸',t:'Agregá tu último análisis de sangre',d:'Tocá para cargar, o mandámelo por el chat',act:`openForm('lab')`});
-  if(!S.sleep.some(s=>s.date===today)) nudges.push({ic:'🌙',t:'¿Cómo dormiste anoche?',d:'Registrá tu sueño',act:`openForm('sleep')`});
-  // staleness prompts — keep asking over time
-  const wAge=sinceLast(S.vitals.filter(v=>v.type==='weight'));
-  if(wAge!=null&&wAge>=14) nudges.push({ic:'⚖️',t:'Pesate de nuevo',d:`Tu último peso es de hace ${wAge} días`,act:`openForm('vital')`});
-  const jAge=sinceLast(S.journal);
-  if(jAge!=null&&jAge>=5) nudges.push({ic:'🧠',t:'¿Cómo venís de ánimo?',d:`Hace ${jAge} días que no registrás`,act:`openForm('journal')`});
   const lAge=sinceLast(S.labs);
   if(lAge!=null&&lAge>=180) nudges.push({ic:'🩸',t:'Tus labs están viejos',d:`Hace ${Math.round(lAge/30)} meses del último análisis`,act:`openForm('appt')`});
+  if(!S.vitals.length&&!S.sleep.length) nudges.push({ic:'⌚',t:'Conectá tu reloj / Apple Health',d:'Para traer sueño, FC, HRV y pasos automáticamente',act:`openHealthImport()`});
   // preventive screenings by age (Argentina general guidance)
   const a2=age(p.birthDate);
   if(a2!=null&&a2>=40&&!S.appointments.some(x=>/chequeo|control|anual/i.test(x.title||''))) nudges.push({ic:'🩺',t:'Chequeo anual',d:'A partir de los 40 conviene un control clínico anual',act:`openForm('appt')`});
@@ -415,7 +401,7 @@ function renderToday(){
       <div class="meta">
         <h2>Hola, ${esc((p.name||'').split(' ')[0]||'Jorge')}</h2>
         <div class="date">${a?a+' AÑOS · ':''}${p.sex?esc(p.sex).toUpperCase()+' · ':''}${p.bloodType?'GRUPO '+esc(p.bloodType):''}</div>
-        <div class="small dim" style="margin-top:10px;line-height:1.5">Tu VITAL Score combina perfil, vitales, labs, sueño, entreno y check-ins.</div>
+        <div class="small dim" style="margin-top:10px;line-height:1.5">Tu VITAL Score combina perfil, labs, signos y entreno. Lo diario llega solo de tu reloj.</div>
         <div style="margin-top:12px"><button class="btn sm" onclick="openQuickAdd()">+ Registrar algo</button></div>
       </div>
     </div>
@@ -430,15 +416,6 @@ function renderToday(){
     ${nudges.map(n=>`<div class="nudge" onclick="${n.act}"><div class="ic">${n.ic}</div>
       <div style="flex:1"><div class="item-title">${n.t}</div><div class="small muted">${n.d}</div></div>
       <div class="arr">→</div></div>`).join('')}</div>`:''}
-
-  <div class="card"><h3>Check-in diario · ${fmtDate(today)}</h3>
-    ${CHECK_ITEMS.map(c=>`<div class="checkrow" onclick="toggleCheck('${c.k}')">
-      <div class="chk ${ci[c.k]?'on':''}">✓</div>
-      <div class="ic" style="font-size:17px">${c.ic}</div>
-      <div style="flex:1" class="${ci[c.k]?'':'muted'}">${c.t}</div>
-    </div>`).join('')}
-    <div class="small dim" style="margin-top:11px">¿Cómo te sentís hoy? <a href="#" onclick="openForm('journal');return false">Registrar ánimo/energía →</a></div>
-  </div>
 
   <div class="grid cols2">
     <div class="stat"><div class="k">Peso</div><div class="v">${w?esc(w.value)+' <small>kg</small>':'—'}</div></div>
@@ -455,7 +432,6 @@ function renderToday(){
   </div>`;
   requestAnimationFrame(()=>{const arc=document.getElementById('ringArc');if(arc)arc.style.strokeDashoffset=off;});
 }
-function toggleCheck(k){const t=todayISO();S.checkins[t]=S.checkins[t]||{};S.checkins[t][k]=!S.checkins[t][k];save();renderToday();}
 function profileCompleteness(){
   const p=S.profile;
   const fields=[['birthDate','Nacimiento'],['sex','Sexo'],['heightCm','Altura'],['weightKg','Peso'],
@@ -476,15 +452,16 @@ function removeItem(coll,id){ if(coll==='checkins')return; S[coll]=S[coll].filte
 const VITAL_TYPES=[
   {k:'weight',t:'Peso',u:'kg'},{k:'bodyfat',t:'Grasa corporal',u:'%'},
   {k:'bp_sys',t:'Presión sistólica',u:'mmHg'},{k:'bp_dia',t:'Presión diastólica',u:'mmHg'},
-  {k:'rhr',t:'FC en reposo',u:'lpm'},{k:'hrv',t:'HRV',u:'ms'},
+  {k:'rhr',t:'FC en reposo',u:'lpm'},{k:'hrv',t:'HRV',u:'ms'},{k:'steps',t:'Pasos',u:''},
   {k:'waist',t:'Cintura',u:'cm'},{k:'temp',t:'Temperatura',u:'°C'},{k:'spo2',t:'SpO₂',u:'%'},
 ];
 function renderBody(){
   const el=document.getElementById('v-body');
-  let html=sectionHead('Cuerpo','vital');
+  let html=`${kicker()}<div class="sectionhead"><h2>Cuerpo</h2>
+    <button class="btn sm" onclick="openHealthImport()">⌚ Conectar / importar</button></div>`;
   const groups={}; S.vitals.forEach(v=>{(groups[v.type]||=[]).push(v);});
   const present=VITAL_TYPES.filter(t=>groups[t.k]);
-  if(!present.length){el.innerHTML=html+emptyCard('Aún no cargaste signos vitales.<br>Tocá <b>+ Agregar</b> para registrar peso, presión, frecuencia cardíaca, etc.<br>O conectá tu Apple Watch y mandámelos por el chat.');return;}
+  if(!present.length){el.innerHTML=html+emptyCard('Estos datos (peso, FC, HRV, SpO₂, pasos…) llegan <b>automáticamente</b> desde tu reloj.<br>Tocá <b>⌚ Conectar / importar</b> para traerlos desde Apple Health.<br><span class="dim">¿Un valor suelto? El botón ＋ sigue estando.</span>');return;}
   html+='<div class="grid cols2">';
   present.forEach(t=>{
     const arr=groups[t.k].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
@@ -577,9 +554,10 @@ function renderNutri(){
 /* ---------- SLEEP ---------- */
 function renderSleep(){
   const el=document.getElementById('v-sleep');
-  let html=sectionHead('Sueño','sleep');
+  let html=`${kicker()}<div class="sectionhead"><h2>Sueño</h2>
+    <button class="btn sm" onclick="openHealthImport()">⌚ Conectar / importar</button></div>`;
   const items=S.sleep.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-  if(!items.length){el.innerHTML=html+emptyCard('No hay registros de sueño.<br>Tocá <b>+ Agregar</b> o conectá tu reloj/anillo para traer horas y calidad.');return;}
+  if(!items.length){el.innerHTML=html+emptyCard('Tu sueño llega <b>automáticamente</b> desde tu reloj/anillo.<br>Tocá <b>⌚ Conectar / importar</b> para traerlo desde Apple Health.');return;}
   const last=items[items.length-1];
   const avg=(items.slice(-7).reduce((s,x)=>s+(+x.hours||0),0)/Math.min(7,items.length)).toFixed(1);
   html+=`<div class="grid cols3"><div class="stat"><div class="k">Anoche</div><div class="v">${esc(last.hours)} <small>h</small></div></div>
@@ -731,7 +709,8 @@ function renderSettings(){
   <div class="card"><h3>Datos · sincronización</h3>
     <p class="small muted" style="margin:0 0 13px;line-height:1.6">Tus datos viven en este navegador. Exportá para respaldar o para pasármelos por el chat. El agente puede actualizar los archivos del proyecto y vos los traés con “Actualizar desde archivos”.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn sm" onclick="exportData()">⬇ Exportar</button>
+      <button class="btn sm" onclick="openHealthImport()">⌚ Apple Health</button>
+      <button class="btn sm ghost" onclick="exportData()">⬇ Exportar</button>
       <button class="btn sm ghost" onclick="copyData()">⧉ Copiar</button>
       <button class="btn sm ghost" onclick="openImport()">⬆ Importar</button>
       <button class="btn sm ghost" onclick="openGymImport()">🏋 GymBro</button>
@@ -948,6 +927,48 @@ function doGymImport(){
     save();closeSheet();show('gym');toast('GymBro importado');}catch(e){toast('JSON inválido');}
 }
 async function reSeed(){const files=await seedFromFiles();applySeed(files);save();renderCurrent();toast('Actualizado (sin perder tus datos)');}
+
+/* ---------- Apple Health import (automatic data path) ---------- */
+function openHealthImport(){
+  openSheet(`<h2>Conectar Apple Health</h2><div class="desc">Lo de todos los días (sueño, FC, HRV, SpO₂, peso, pasos, presión) entra solo desde tu reloj. En el iPhone instalá <b>Health Auto Export</b>, configurá un export en <b>JSON</b> de tus métricas y pegá el contenido acá (lo mapeo y deduplico por fecha). Más adelante lo dejamos 100% automático con un backend.</div>
+    <div class="field"><textarea id="haeTxt" style="min-height:170px" placeholder='{"data":{"metrics":[{"name":"weight_body_mass","data":[{"date":"2026-06-20 08:00:00 -0300","qty":82.1}]}]}}'></textarea></div>
+    <div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="doHealthImport()">Importar</button>
+    <button class="btn ghost" onclick="closeSheet()">Cancelar</button></div>`);
+}
+function doHealthImport(){
+  try{
+    const j=JSON.parse(document.getElementById('haeTxt').value);
+    const metrics=(j.data&&j.data.metrics)||j.metrics||[];
+    if(!Array.isArray(metrics)||!metrics.length){toast('No encontré métricas');return;}
+    const dkey=s=>(''+(s||'')).slice(0,10);
+    const NAMEMAP={weight_body_mass:'weight',body_mass:'weight',body_fat_percentage:'bodyfat',
+      resting_heart_rate:'rhr',heart_rate_variability:'hrv',heart_rate_variability_sdnn:'hrv',
+      blood_oxygen_saturation:'spo2',oxygen_saturation:'spo2',step_count:'steps',
+      waist_circumference:'waist',apple_sleeping_wrist_temperature:'temp',body_temperature:'temp'};
+    const upV=(type,date,value)=>{const u=(VITAL_TYPES.find(t=>t.k===type)||{}).u||'';
+      const i=S.vitals.findIndex(v=>v.type===type&&v.date===date);
+      if(i>=0)S.vitals[i].value=value; else S.vitals.push({id:uid(),type,value,unit:u,date,source:'apple-health'});};
+    const upS=(date,hours)=>{const i=S.sleep.findIndex(s=>s.date===date);
+      if(i>=0)S.sleep[i].hours=hours; else S.sleep.push({id:uid(),hours,date,source:'apple-health'});};
+    let n=0;
+    metrics.forEach(m=>{
+      const name=(m.name||'').toLowerCase(); const data=m.data||[];
+      if(name.includes('sleep')){
+        data.forEach(pt=>{const date=dkey(pt.date||pt.startDate); if(!date)return;
+          let h=pt.asleep!=null?+pt.asleep:(pt.totalSleep!=null?+pt.totalSleep:(pt.value!=null?+pt.value:(pt.qty!=null?+pt.qty:null)));
+          if(h==null||isNaN(h))return; if(h>24)h=h/3600; upS(date,+h.toFixed(1)); n++;});
+        return;
+      }
+      let type=NAMEMAP[name];
+      if(!type){ if(name.includes('systolic'))type='bp_sys'; else if(name.includes('diastolic'))type='bp_dia'; else if(name.includes('step'))type='steps'; }
+      if(!type)return;
+      data.forEach(pt=>{const date=dkey(pt.date); if(!date)return;
+        let v=pt.qty!=null?+pt.qty:(pt.Avg!=null?+pt.Avg:(pt.value!=null?+pt.value:null));
+        if(v==null||isNaN(v))return; upV(type,date,type==='steps'?Math.round(v):+v.toFixed(2)); n++;});
+    });
+    backupNow();save();closeSheet();show('body');toast(n?n+' datos importados':'Nada para importar');
+  }catch(e){toast('JSON inválido');}
+}
 function wipe(){if(confirm('¿Borrar TODOS tus datos de este navegador? Se guarda una copia restaurable.')){backupNow();localStorage.removeItem(LS_KEY);location.reload();}}
 
 /* ---------- ticker ---------- */
