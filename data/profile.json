@@ -1,0 +1,8 @@
+{
+  "name": "Jorge",
+  "locale": "es-AR",
+  "units": { "weight": "kg", "height": "cm", "labs": "mg/dL", "dateFormat": "DD/MM/YYYY" },
+  "birthDate": null, "sex": null, "heightCm": null, "weightKg": null, "bloodType": null,
+  "conditions": [], "allergies": [], "goals": [], "emergencyContact": null, "insurance": null,
+  "familyHistory": "", "smoking": null, "alcohol": "", "caffeine": ""
+}

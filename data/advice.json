@@ -1,0 +1,30 @@
+{
+  "items": [
+    {
+      "date": "2026-06-23",
+      "category": "general",
+      "title": "Bienvenido a Vital",
+      "body": "Este es tu centro de salud privado. Tocá el botón ＋ para registrar peso, presión, labs, suplementos, sueño, ánimo y más. Tus datos se guardan solo en este dispositivo (localStorage); nada se sube a internet. Exportá/importá desde Ajustes para mover tus datos entre dispositivos.",
+      "priority": "low",
+      "basedOn": "Configuración inicial"
+    },
+    {
+      "date": "2026-06-23",
+      "category": "device",
+      "title": "Stack de salud para iPhone (presupuesto ~USD 3.000)",
+      "body": "Apple Watch Ultra 2 (FC, ECG, O2, sueño, entreno) + Oura Ring 4 (sueño/recuperación) + balanza Withings Body Scan (composición corporal) + tensiómetro Withings BPM Connect + un monitor continuo de glucosa (Lingo/Stelo) por 1-2 meses. Todo entra a Apple Health.",
+      "priority": "med",
+      "basedOn": "iPhone 16 Pro"
+    }
+  ],
+  "recommendations": [
+    { "name": "Apple Watch Ultra 2", "type": "watch", "why": "El mejor compañero del iPhone: ECG, O2 en sangre, FC/HRV, GPS doble, batería 36-72 h, métricas de entreno y sueño.", "price": "~USD 800", "link": "https://www.apple.com/apple-watch-ultra-2/" },
+    { "name": "Apple Watch Series 10", "type": "watch", "why": "Alternativa más fina y barata. Detección de apnea del sueño y ECG.", "price": "~USD 400", "link": "https://www.apple.com/apple-watch-series-10/" },
+    { "name": "Oura Ring 4", "type": "ring", "why": "Referente en sueño y recuperación (HRV, temperatura, fases). Sincroniza con Apple Health.", "price": "~USD 350 + susc.", "link": "https://ouraring.com/" },
+    { "name": "Withings Body Scan", "type": "scale", "why": "Balanza premium: % grasa, masa muscular segmentada, ECG de pie y salud vascular.", "price": "~USD 400", "link": "https://www.withings.com/eu/en/body-scan" },
+    { "name": "Withings BPM Connect", "type": "bp", "why": "Tensiómetro de brazo validado clínicamente, sincroniza presión a Apple Health.", "price": "~USD 100", "link": "https://www.withings.com/us/en/bpm-connect" },
+    { "name": "Abbott Lingo / Stelo (CGM)", "type": "cgm", "why": "Monitor continuo de glucosa sin pinchazos. 1-2 meses muestran cómo respondés a cada comida y al entreno.", "price": "~USD 50/mes", "link": "https://www.hellolingo.com/" },
+    { "name": "MacroFactor", "type": "app", "why": "La mejor app de nutrición 2026: ajusta calorías según tu progreso real.", "price": "~USD 12/mes", "link": "https://macrofactorapp.com/" },
+    { "name": "Hevy", "type": "app", "why": "Registro de gimnasio con histórico y gráficos de fuerza. iOS.", "price": "Gratis / Pro", "link": "https://www.hevyapp.com/" }
+  ]
+}
