@@ -184,6 +184,78 @@
   .del{font-family:var(--mono);color:var(--dim);cursor:pointer;font-size:14px;display:inline-flex;
     align-items:center;justify-content:center;width:44px;height:44px;margin:-12px -12px -12px 0;flex:0 0 auto}
   .del:hover{color:var(--bad)}
+  /* ---- score breakdown ---- */
+  .sb-banner{background:rgba(255,90,54,.07);border:1px solid rgba(255,90,54,.22);border-radius:11px;
+    padding:12px 14px;font-size:13px;line-height:1.55;color:var(--txt);margin-bottom:18px}
+  .sb-group{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--dim);margin:18px 2px 8px}
+  .sb-row{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid rgba(240,237,230,.06)}
+  .sb-ic{flex:0 0 auto;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;margin-top:1px}
+  .sb-ic.good{background:rgba(80,200,120,.14);color:#5cc88a}
+  .sb-ic.watch{background:rgba(255,196,80,.14);color:#ffc450}
+  .sb-ic.miss{background:rgba(240,237,230,.06);color:var(--dim)}
+  .sb-main{flex:1;min-width:0}
+  .sb-lbl{font-size:13.5px;font-weight:600;line-height:1.35}
+  .sb-tip{font-size:11.5px;color:var(--mut);line-height:1.45;margin-top:3px}
+  .sb-val{flex:0 0 auto;font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px}
+  .sb-val.good{color:#5cc88a}.sb-val.watch{color:#ffc450}.sb-val.miss{color:var(--dim)}
+  .sb-note{margin-top:16px;background:rgba(240,237,230,.04);border-radius:10px;padding:12px 14px;
+    font-size:12.5px;line-height:1.55;color:var(--mut)}
+  /* ---- labs intelligence ---- */
+  .lread-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+  .lread{border:1px solid rgba(240,237,230,.1);border-radius:13px;padding:13px 15px;background:rgba(240,237,230,.03)}
+  .lread.good{border-color:rgba(90,209,126,.3);background:rgba(90,209,126,.06)}
+  .lread-h{font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+  .lread.good .lread-h b{color:var(--good)}
+  .lread-b{font-size:12.5px;line-height:1.5;color:var(--mut)}
+  .syscard{border:1px solid rgba(240,237,230,.08);border-radius:13px;margin-bottom:9px;overflow:hidden;background:var(--card,rgba(240,237,230,.02))}
+  .syscard summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;font-weight:700}
+  .syscard summary::-webkit-details-marker{display:none}
+  .sys-name{font-family:var(--grot);font-size:15px;font-weight:800;letter-spacing:-.01em}
+  .sys-verdict{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:6px}
+  .sys-verdict.ok{color:var(--good);background:rgba(90,209,126,.1)}
+  .sys-verdict.watch{color:var(--warn);background:rgba(245,177,61,.12)}
+  .sysbody{padding:4px 16px 12px}
+  .lrow{padding:11px 0;border-top:1px solid rgba(240,237,230,.06)}
+  .lrow-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .lrow-name{font-size:13.5px;font-weight:600}
+  .lrow-val b{font-family:var(--grot);font-size:17px;font-weight:800}
+  .lrow-val b.bad{color:var(--bad)}
+  .lrow-val small{font-family:var(--mono);font-size:10px;color:var(--dim)}
+  .rbar{position:relative;height:7px;border-radius:4px;background:rgba(240,237,230,.07);margin:8px 0 7px}
+  .rbar-band{position:absolute;top:0;bottom:0;background:rgba(90,209,126,.28);border-radius:4px}
+  .rbar-dot{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);
+    border:2px solid var(--bg,#0a0a0a)}
+  .rbar-dot.in{background:var(--cream)}
+  .rbar-dot.out{background:var(--coral);box-shadow:0 0 0 3px rgba(255,90,54,.25)}
+  .lrow-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+  .lrow-ref{font-family:var(--mono);font-size:10px;color:var(--dim);flex:0 0 auto}
+  .lrow-info{font-size:11.5px;color:var(--mut);line-height:1.4}
+  /* ---- insight cards ---- */
+  .insight{display:flex;gap:12px;align-items:flex-start;padding:13px;border-radius:12px;cursor:pointer;
+    background:rgba(255,90,54,.05);border:1px solid rgba(255,90,54,.14);margin-bottom:9px;transition:.15s}
+  .insight:last-child{margin-bottom:0}
+  .insight:hover{background:rgba(255,90,54,.09);border-color:rgba(255,90,54,.3)}
+  .ins-ic{flex:0 0 auto;font-size:20px;line-height:1.2}
+  .ins-main{flex:1;min-width:0}
+  .ins-title{font-weight:700;font-size:13.5px;margin-bottom:3px;letter-spacing:-.01em}
+  .ins-body{font-size:12px;color:var(--mut);line-height:1.5}
+  .ins-x{flex:0 0 auto;color:var(--dim);font-size:13px;width:24px;height:24px;display:flex;
+    align-items:center;justify-content:center;border-radius:6px}
+  .ins-x:hover{color:var(--bad);background:rgba(255,107,107,.1)}
+  /* ---- muscle targets ---- */
+  .mt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 12px}
+  .mt-big{background:rgba(240,237,230,.04);border-radius:12px;padding:14px}
+  .mt-n{font-family:var(--grot);font-size:30px;font-weight:900;letter-spacing:-.03em;line-height:1}
+  .mt-n small{font-family:var(--mono);font-size:13px;font-weight:400;color:var(--dim);margin-left:2px}
+  .mt-l{font-size:12px;margin-top:5px;font-weight:600}
+  .mt-sub{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px}
+  .mt-macros{display:flex;flex-wrap:wrap;gap:7px}
+  .mt-chip{font-size:11.5px;padding:6px 11px;border-radius:8px;background:rgba(240,237,230,.05);border:1px solid rgba(240,237,230,.08)}
+  .mt-chip b{font-family:var(--grot);font-weight:800}
+  .mt-chip.alt{background:rgba(255,90,54,.1);border-color:rgba(255,90,54,.25)}
 </style>
 </head>
 <body>
@@ -309,21 +381,93 @@ function latestVital(type){const a=S.vitals.filter(v=>v.type===type).sort((x,y)=
 
 /* ---------- health score ---------- */
 function healthScore(){
-  let score=50, parts=[];
-  const add=(n,why)=>{score+=n;parts.push(why);};
-  const p=S.profile; let pc=['birthDate','sex','heightCm','weightKg','bloodType'].filter(k=>p[k]).length;
-  add(pc*2,'perfil');
+  const p=S.profile;
   const recent=(arr,days,key='date')=>arr.filter(x=>{const d=daysUntil(x[key]);return d!=null&&d>=-days;}).length;
-  if(recent(S.vitals,30)>0) add(8,'vitales'); else add(-4,'sin vitales');
-  if(S.labs.length) add(8,'labs'); else add(-2,'sin labs');
-  if(S.supplements.filter(x=>x.active!==false).length) add(4,'suplementos');
-  if(recent(S.sleep,7)>=3) add(8,'sueño'); else add(-2,'poco sueño');
-  if((S.gym.summary?.weeklyCount||0)>=2) add(10,'entreno'); else add(-3,'poco entreno');
-  if(recent(S.journal,7)>=2) add(6,'check-ins');
-  if(S.appointments.some(a=>a.status==='upcoming')) add(3,'controles');
-  const bad=S.labs.filter(l=>l.flag==='high'||l.flag==='low').length; add(-Math.min(12,bad*3), bad?'labs fuera de rango':'');
-  return {score:Math.max(5,Math.min(99,Math.round(score))), parts:parts.filter(Boolean)};
+  const F=[]; // factores: {group:'salud'|'datos', label, got, max, kind, tip}
+  const push=(group,label,got,max,kind,tip)=>F.push({group,label,got,max,kind,tip:tip||''});
+
+  // ---------- SALUD (señales reales de tu cuerpo) ----------
+  if(S.labs.length){
+    const flagged=S.labs.filter(l=>l.flag==='high'||l.flag==='low');
+    const inRange=S.labs.length-flagged.length;
+    push('salud',`Bioquímica: ${inRange}/${S.labs.length} valores en rango`, Math.round(inRange/S.labs.length*18), 18,'good',
+      'La gran mayoría de tu análisis está dentro de los valores de referencia. Es buena salud de base, no un problema.');
+    if(flagged.length) push('salud',`${flagged.length} valores a recontrolar`, -Math.min(12,flagged.length*3), 0,'watch',
+      'De 2025: '+flagged.map(f=>f.marker).join(', ')+'. Los venís corrigiendo con los suplementos; tu nuevo análisis (30/07) dirá si se acomodaron. No es una alarma.');
+  } else {
+    push('datos','Sin análisis cargado', 0, 8,'missing','Cargá tu último análisis para que el centro evalúe tu bioquímica.');
+  }
+  const trains=(S.gym.summary?.weeklyCount||0)>=2;
+  push('salud','Entrenás 2+ veces por semana', trains?10:0, 10, trains?'good':'missing',
+    trains?'':'Ya entrenás 3-5 veces — falta sincronizar GymBro para que el centro lo cuente. No es que no entrenes.');
+  const sleepOk=recent(S.sleep,7)>=3;
+  push('salud','Sueño medido y suficiente', sleepOk?8:0, 8, sleepOk?'good':'missing',
+    sleepOk?'':'Cuando conectes un reloj/anillo, tu sueño entra solo y suma acá.');
+
+  // ---------- DATOS (lo que al centro le falta tener — NO es tu salud) ----------
+  const pcFields=['birthDate','sex','heightCm','weightKg','bloodType']; const pc=pcFields.filter(k=>p[k]).length;
+  push('datos',`Perfil ${pc}/${pcFields.length} completo`, pc*2, pcFields.length*2,'profile',
+    pc<pcFields.length?'Sumá altura, peso y grupo sanguíneo (te los pedí para el plan muscular).':'');
+  const wear=recent(S.vitals,30)>0;
+  push('datos','Reloj / Apple Health conectado', wear?8:0, 8, wear?'good':'missing',
+    wear?'':'Todavía sin reloj: FC, HRV, SpO₂, peso y pasos no entran automáticamente.');
+  push('datos','Controles agendados', S.appointments.some(a=>a.status==='upcoming')?3:0,3,'good','');
+
+  let score=Math.max(5,Math.min(99,Math.round(50+F.reduce((s,f)=>s+f.got,0))));
+  const grade=score>=80?'Excelente':score>=65?'Muy bien':score>=50?'Sólido':score>=35?'En construcción':'Arrancando';
+  const datosGap=F.filter(f=>f.group==='datos').reduce((s,f)=>s+(f.max-f.got),0);
+  const saludGap=F.filter(f=>f.kind==='watch').reduce((s,f)=>s-f.got,0);
+  return {score, grade, factors:F, datosGap, saludGap};
 }
+function openScoreBreakdown(){
+  const {score,grade,factors,datosGap,saludGap}=healthScore();
+  const row=f=>{
+    const ic=f.kind==='good'?'✓':f.kind==='watch'?'◷':f.kind==='profile'?'👤':f.kind==='missing'?'＋':'•';
+    const cls=f.kind==='good'?'good':f.kind==='watch'?'watch':'miss';
+    const val=f.got>0?`+${f.got}`:f.got<0?`${f.got}`:(f.max?`+0 / +${f.max}`:'—');
+    return `<div class="sb-row">
+      <div class="sb-ic ${cls}">${ic}</div>
+      <div class="sb-main"><div class="sb-lbl">${f.label}</div>${f.tip?`<div class="sb-tip">${f.tip}</div>`:''}</div>
+      <div class="sb-val ${cls}">${val}</div></div>`;
+  };
+  const salud=factors.filter(f=>f.group==='salud'), datos=factors.filter(f=>f.group==='datos');
+  const dom = datosGap>=saludGap
+    ? `Lo que más te frena <b>no es tu salud</b>: son <b>datos que el centro todavía no tiene</b> (reloj sin conectar, entrenos sin sincronizar, perfil incompleto). Suma rápido en cuanto los conectes.`
+    : `El principal punto a seguir son <b>${saludGap} pts</b> de valores de laboratorio de 2025 que vas a recontrolar el 30/07.`;
+  openSheet(`<h2>Tu Vital Score: ${score} <span class="dim" style="font-weight:400">· ${grade}</span></h2>
+    <div class="desc">No es una nota de "qué tan enfermo estás". Es <b>cuánta foto de tu salud tiene el centro</b>. Arranca en 50 y sube o baja según esto:</div>
+    <div class="sb-banner">${dom}</div>
+    <div class="sb-group">SALUD · señales reales de tu cuerpo</div>
+    ${salud.map(row).join('')}
+    <div class="sb-group">DATOS · lo que falta conectar (no es tu salud)</div>
+    ${datos.map(row).join('')}
+    <div class="sb-note">📈 Subís el score sin esfuerzo diario: completá el perfil, conectá un reloj, sincronizá GymBro, y dejá que lleguen tus labs del 30/07. Nada de carga manual día a día.</div>
+    <button class="btn" style="margin-top:14px;width:100%" onclick="closeSheet()">Entendido</button>`);
+}
+/* ---------- motor de insights: cruza labs + suplementos + turnos + objetivos ---------- */
+function buildInsights(){
+  const out=[];
+  const flag=n=>{const r=labFind(n);return r&&(r.flag==='high'||r.flag==='low')?r:null;};
+  const supp=txt=>S.supplements.some(s=>(((s.name||'')+' '+(s.purpose||'')+' '+(s.notes||'')).toLowerCase().includes(txt)));
+  const add=(id,ic,title,body,link)=>out.push({id,ic,title,body,link});
+  const cort=flag('Cortisol'), mn=flag('Manganeso'), eo=flag('Eosin'), mono=flag('Monocitos');
+  if(cort) add('cortisol-sueno','🌙','Tu cortisol y tu sueño están conectados',
+    `Tu cortisol salió algo alto (${cort.value}) y vos mismo decís que dormís poco (~7 h). Dormir poco sube el cortisol; tu magnesio de noche ya juega a favor. Mejorar el descanso puede ayudar a bajarlo — lo chequeamos en el análisis nuevo. (Una sola muestra depende de la hora de extracción.)`,'sleep');
+  if(mn&&supp('manganeso')) add('manganeso','🧪','Manganeso: a confirmar en el nuevo análisis',
+    `Estaba indetectable (<0.10) y lo venís suplementando (5 mg/día). Tu análisis del 30/06 debería mostrar si subió — es la hipótesis más clara para verificar que la fórmula funciona.`,'labs');
+  if(eo) add('eosino','🤧','Eosinófilos altos: posible alergia',
+    `Tus eosinófilos (${eo.value}%) suelen subir por un componente alérgico/atópico. La quercetina de tu fórmula es antihistamínica y puede ayudar. Si tenés rinitis o alergias, vale comentarlo en el control.`,'labs');
+  if(cort||mono) add('gap-medico','🩺','Anotá para tu próximo control',
+    `${[cort&&'tu cortisol alto',mono&&'tus monocitos bajos'].filter(Boolean).join(' y ')} no ${(cort&&mono)?'tienen':'tiene'} ningún suplemento apuntándole directamente. No es para automedicarse: anotalo para preguntarle a la Dra. Cristaldo.`,'appts');
+  if((S.profile.goals||[]).some(g=>/m[úu]scul/i.test(g))&&!S.profile.weightKg)
+    add('peso-proteina','🏋️','Cargá tu peso para el plan muscular',
+    `Para darte el objetivo exacto de proteína y calorías (tu meta #1) necesito tu peso y altura. Tocá para completarlo y se activa la calculadora en Nutrición.`,'__profile');
+  const bt=S.appointments.find(a=>a.status==='upcoming'&&/sangre|an[áa]lisis|test|control/i.test(((a.title||'')+' '+(a.type||''))));
+  if(bt){const d=daysUntil(bt.date);if(d!=null&&d>=0&&d<=45) add('comparador','📊','Tu próximo análisis va a ser comparable',
+    `En ${d} día(s) te hacés el control. Cuando lleguen los resultados los comparo marcador por marcador contra tu base de 2025 para ver exactamente qué se acomodó.`,'labs');}
+  return out.filter(i=>!((S.meta&&S.meta.dismissed)||[]).includes(i.id));
+}
+function dismissInsight(id){ if(!S.meta.dismissed)S.meta.dismissed=[]; S.meta.dismissed.push(id); save(); renderToday(); toast('Listo, no lo muestro más'); }
 
 /* ============================================================
    SECTIONS
@@ -365,7 +509,8 @@ function renderCurrent(){ const s=SECTIONS.find(s=>s.id===CUR); if(s) s.render()
 /* ---------- TODAY ---------- */
 function renderToday(){
   const el=document.getElementById('v-today');
-  const {score}=healthScore();
+  const hs=healthScore(); const score=hs.score;
+  const insights=buildInsights();
   const p=S.profile; const a=age(p.birthDate);
   const sinceLast=(arr,key='date')=>{const ds=arr.map(x=>daysUntil(x[key])).filter(d=>d!=null);return ds.length?-Math.max(...ds):null;};
   const nudges=[];
@@ -382,12 +527,15 @@ function renderToday(){
   const upcoming=S.appointments.filter(x=>x.status==='upcoming').sort((a,b)=>(a.date||'').localeCompare(b.date||'')).slice(0,3);
   const w=latestVital('weight'), bp_s=latestVital('bp_sys'), bp_d=latestVital('bp_dia'), rhr=latestVital('rhr');
   const ring=score, c=2*Math.PI*60, off=c*(1-ring/100);
-  const grade=ring>=80?'Excelente':ring>=65?'Muy bien':ring>=50?'Bien':ring>=35?'A mejorar':'Atención';
+  const grade=hs.grade;
+  const scoreWhy=hs.datosGap>=hs.saludGap
+    ? `Está en ${score} sobre todo porque al centro le faltan <b>datos</b> (reloj sin conectar, entrenos sin sincronizar), <b>no por tu salud</b>.`
+    : `Está en ${score}; lo único de salud a seguir son ${hs.saludGap} pts de valores de 2025 a recontrolar.`;
   el.innerHTML=`
   ${kicker()}
   <div class="card">
     <div class="hero">
-      <div class="ring-wrap">
+      <div class="ring-wrap" onclick="openScoreBreakdown()" style="cursor:pointer" title="Ver desglose">
         <svg width="150" height="150" viewBox="0 0 150 150">
           <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stop-color="#ff5a36"/><stop offset=".6" stop-color="#ff7d54"/><stop offset="1" stop-color="#ffc7a6"/>
@@ -401,11 +549,18 @@ function renderToday(){
       <div class="meta">
         <h2>Hola, ${esc((p.name||'').split(' ')[0]||'Jorge')}</h2>
         <div class="date">${a?a+' AÑOS · ':''}${p.sex?esc(p.sex).toUpperCase()+' · ':''}${p.bloodType?'GRUPO '+esc(p.bloodType):''}</div>
-        <div class="small dim" style="margin-top:10px;line-height:1.5">Tu VITAL Score combina perfil, labs, signos y entreno. Lo diario llega solo de tu reloj.</div>
+        <div class="small dim" style="margin-top:10px;line-height:1.5">${scoreWhy} <a href="#" onclick="openScoreBreakdown();return false;" style="color:var(--coral)">ver desglose →</a></div>
         <div style="margin-top:12px"><button class="btn sm" onclick="openQuickAdd()">+ Registrar algo</button></div>
       </div>
     </div>
   </div>
+
+  ${insights.length?`<div class="card"><h3>El centro detectó <span class="badge">${insights.length}</span></h3>
+    ${insights.map(i=>`<div class="insight" onclick="${i.link==='__profile'?'openProfile()':`show('${i.link}')`}">
+      <div class="ins-ic">${i.ic}</div>
+      <div class="ins-main"><div class="ins-title">${i.title}</div><div class="ins-body">${i.body}</div></div>
+      <span class="ins-x" onclick="event.stopPropagation();dismissInsight('${i.id}')" title="Descartar">✕</span>
+    </div>`).join('')}</div>`:''}
 
   ${(()=>{const c=profileCompleteness();return c.pct<100?`<div class="card" onclick="openProfile()" style="cursor:pointer">
     <h3>Perfil completo <span class="badge">${c.pct}%</span></h3>
@@ -479,25 +634,94 @@ function renderBody(){
 }
 
 /* ---------- LABS ---------- */
+// Diccionario es-AR: qué mide cada marcador (los más relevantes; el resto cae al campo note)
+const LAB_INFO={
+  'Eosinófilos':'Glóbulo blanco que sube con alergias, atopía o parásitos.',
+  'Monocitos':'Glóbulo blanco que limpia y defiende; bajo suele ser benigno.',
+  'Glucemia':'Tu azúcar en sangre en ayunas.',
+  'HbA1c':'Tu azúcar promedio de los últimos ~3 meses. <5.7% es óptimo.',
+  'Insulina':'Hormona que mete el azúcar a las células.',
+  'HOMA-IR':'Resistencia a la insulina. <2 = muy buena sensibilidad.',
+  'Colesterol HDL':'El colesterol "bueno". Más alto es mejor (>60 óptimo).',
+  'Colesterol LDL':'El colesterol "malo" que se deposita en las arterias.',
+  'Triglicéridos':'Grasa en sangre; bajo es señal metabólica buena.',
+  'Apolipoproteína B':'Cuenta las partículas que tapan arterias. <90 deseable. El mejor predictor cardiovascular.',
+  'Lipoproteína (a)':'Riesgo cardiovascular genético. El tuyo bajo = excelente y no cambia con dieta.',
+  'PCR ultrasensible':'Inflamación general del cuerpo. Bajo es bueno.',
+  'Cortisol':'Hormona del estrés. Sube con estrés, poco sueño y según la hora de extracción.',
+  'Testosterona total':'Hormona clave para músculo, energía y libido.',
+  'PSA total':'Marcador de próstata. <4 normal.',
+  'Vitamina D (25-OH)':'Hueso, inmunidad y ánimo. Muchos apuntan a 40-60.',
+  'Vitamina B12':'Energía y nervios. En la mitad baja conviene vigilar.',
+  'Manganeso sérico':'Oligoelemento; el tuyo estaba indetectable, por eso lo suplementás.',
+  'Ferritina':'Reservas de hierro del cuerpo.',
+  'TSH':'Marcador maestro de tiroides.',
+  'Creatinina':'Función del riñón.',
+};
+const SYS_VERDICT={Hemograma:'Sangre y defensas',Metabólico:'Azúcar e insulina',Lípidos:'Colesterol y arterias',Hepatograma:'Hígado',Renal:'Riñón',Inflamación:'Inflamación',Tiroides:'Tiroides',Hormonal:'Hormonas',Vitaminas:'Vitaminas',Minerales:'Minerales',Tóxicos:'Metales/tóxicos'};
+function labFind(sub){const m=S.labs.filter(r=>(r.marker||'').toLowerCase().includes(sub.toLowerCase()));m.sort((a,b)=>(a.date||'').localeCompare(b.date||''));return m[m.length-1]||null;}
+function rangeBar(r){
+  const lo=r.refLow,hi=r.refHigh,v=+r.value;
+  if(lo==null&&hi==null||isNaN(v))return '';
+  let dLo,dHi;
+  if(lo!=null&&hi!=null){const pad=(hi-lo)*0.28;dLo=Math.min(lo-pad,v);dHi=Math.max(hi+pad,v);}
+  else if(hi!=null){dLo=0;dHi=Math.max(hi*1.3,v*1.1);}
+  else{dLo=Math.min(lo*0.7,v*0.9);dHi=Math.max(lo*1.7,v*1.1);}
+  const span=(dHi-dLo)||1,pct=x=>Math.max(1,Math.min(99,((x-dLo)/span)*100));
+  const bL=lo!=null?pct(lo):0,bR=hi!=null?pct(hi):100,vp=pct(v);
+  const out=r.flag==='high'||r.flag==='low';
+  return `<div class="rbar"><div class="rbar-band" style="left:${bL}%;right:${100-bR}%"></div>
+    <div class="rbar-dot ${out?'out':'in'}" style="left:${vp}%"></div></div>`;
+}
 function renderLabs(){
   const el=document.getElementById('v-labs');
   let html=sectionHead('Laboratorio','lab');
   if(!S.labs.length){el.innerHTML=html+emptyCard('No hay resultados.<br>Tocá <b>+ Agregar</b> o mandame una foto de tu análisis por el chat y lo cargo con rangos de referencia.');return;}
-  const byM={}; S.labs.forEach(r=>{(byM[r.marker]||=[]).push(r);});
-  html+=Object.entries(byM).map(([marker,arr])=>{
-    arr.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-    const last=arr[arr.length-1];
-    const ref=(last.refLow!=null||last.refHigh!=null)?`Ref: ${last.refLow??''}–${last.refHigh??''} ${esc(last.unit||'')}`:'';
-    const cid='cl_'+marker.replace(/\W/g,'');
-    return `<div class="card"><div class="row" style="border:0;padding:0 0 6px">
-      <div><div class="item-title">${esc(marker)}</div><div class="small muted">${ref}</div></div>
-      <div style="text-align:right"><div class="v" style="font-family:var(--grot);font-size:22px;font-weight:800">${esc(last.value)} <small class="muted" style="font-family:var(--mono);font-size:11px">${esc(last.unit||'')}</small></div>
-      <span class="pill ${flagClass(last.flag)}">${esc(last.flag||'—')}</span></div></div>
-      ${arr.length>1?`<canvas id="${cid}" height="120"></canvas>`:''}
-      <div class="date" style="margin-top:7px">${arr.length} medición(es) · ${fmtDate(last.date)} ${delBtn('labs',last.id)}</div></div>`;
-  }).join('');
+  // fecha del análisis y conteo de flags
+  const dates=[...new Set(S.labs.map(r=>r.date))].sort();
+  const flagged=S.labs.filter(r=>r.flag==='high'||r.flag==='low');
+  // ---- lecturas tranquilizadoras (calculadas de sus valores reales) ----
+  const cards=[];
+  const homa=labFind('HOMA'),a1c=labFind('HbA1c'),glu=labFind('Glucemia');
+  if(homa||a1c){
+    const good=(homa&&+homa.value<2)&&(!a1c||+a1c.value<5.7);
+    cards.push(`<div class="lread ${good?'good':''}"><div class="lread-h">🔥 Metabolismo · <b>${good?'Excelente':'Revisar'}</b></div>
+      <div class="lread-b">${good?'Tu sensibilidad a la insulina es de élite':'Mirá estos valores'}: ${[a1c&&`HbA1c ${a1c.value}%`,homa&&`HOMA-IR ${homa.value}`,glu&&`glucemia ${glu.value}`].filter(Boolean).join(' · ')}. ${good?'Tu cuerpo maneja el azúcar muy bien — base sólida para ganar músculo sin acumular grasa.':''}</div></div>`);
+  }
+  const apob=labFind('Apolipo'),lpa=labFind('Lipoprote'),tg=labFind('Triglic'),hdl=labFind('HDL'),pcr=labFind('PCR');
+  if(apob||lpa){
+    const ratio=(tg&&hdl)?(+tg.value/+hdl.value).toFixed(2):null;
+    const good=(!apob||+apob.value<90)&&(!lpa||+lpa.value<30);
+    cards.push(`<div class="lread ${good?'good':''}"><div class="lread-h">❤️ Cardiovascular · <b>${good?'Riesgo bajo':'Revisar'}</b></div>
+      <div class="lread-b">${[apob&&`ApoB ${apob.value}`,lpa&&`Lp(a) ${lpa.value}`,pcr&&`PCR ${pcr.value}`,ratio&&`TG/HDL ${ratio}`].filter(Boolean).join(' · ')}. ${good?'Tres de los mejores predictores de infarto, todos bajos. Es el dato más tranquilizador de tu panel.':''}</div></div>`);
+  }
+  html+=`<div class="lread-wrap">${cards.join('')}</div>`;
+  // ---- resumen + valores a seguir ----
+  html+=`<div class="card"><h3>Tu análisis <span class="badge">${fmtDate(dates[dates.length-1])}</span></h3>
+    <div class="small" style="line-height:1.6">${S.labs.length-flagged.length} de ${S.labs.length} valores <b style="color:var(--good)">en rango</b>.${flagged.length?` ${flagged.length} a seguir: ${flagged.map(f=>`<span class="pill ${flagClass(f.flag)}">${esc(f.marker)} ${esc(f.value)}</span>`).join(' ')}` :' Todo perfecto.'}</div></div>`;
+  // ---- por sistema (usa panel), colapsable ----
+  const bySys={}; S.labs.forEach(r=>{(bySys[r.panel||'Otros']||=[]).push(r);});
+  Object.entries(bySys).forEach(([sys,arr])=>{
+    const byM={}; arr.forEach(r=>{(byM[r.marker]||=[]).push(r);});
+    const sysFlags=arr.filter(r=>r.flag==='high'||r.flag==='low');
+    const rows=Object.entries(byM).map(([marker,ms])=>{
+      ms.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+      const last=ms[ms.length-1];
+      const info=LAB_INFO[marker]||Object.entries(LAB_INFO).find(([k])=>marker.includes(k))?.[1]||last.note||'';
+      const ref=(last.refLow!=null||last.refHigh!=null)?`${last.refLow??'<'}–${last.refHigh??''} ${esc(last.unit||'')}`:'';
+      return `<div class="lrow">
+        <div class="lrow-top"><div class="lrow-name">${esc(marker)}</div>
+          <div class="lrow-val"><b class="${last.flag==='high'||last.flag==='low'?'bad':''}">${esc(last.value)}</b> <small>${esc(last.unit||'')}</small></div></div>
+        ${rangeBar(last)}
+        <div class="lrow-meta"><span class="lrow-ref">Ref ${ref}</span>${info?`<span class="lrow-info">${esc(info)}</span>`:''}</div>
+      </div>`;
+    }).join('');
+    html+=`<details class="syscard" ${sysFlags.length?'open':''}><summary>
+      <span class="sys-name">${SYS_VERDICT[sys]||sys}</span>
+      <span class="sys-verdict ${sysFlags.length?'watch':'ok'}">${sysFlags.length?`revisar ${sysFlags.length}`:'todo en rango ✓'}</span>
+      </summary><div class="sysbody">${rows}</div></details>`;
+  });
   el.innerHTML=html;
-  Object.entries(byM).forEach(([m,arr])=>{if(arr.length>1)spark('cl_'+m.replace(/\W/g,''),arr.map(r=>+r.value),arr[arr.length-1],120);});
 }
 function spark(id,vals,last,H){
   const cv=document.getElementById(id);if(!cv)return;H=H||120;
@@ -533,9 +757,40 @@ function renderMeds(){
 }
 
 /* ---------- NUTRITION ---------- */
+function muscleTargets(){
+  const p=S.profile; if(!p.weightKg) return null;
+  const kg=+p.weightKg, cm=+p.heightCm||175, yr=age(p.birthDate)||42, male=p.sex!=='Femenino';
+  const bmr=Math.round(10*kg+6.25*cm-5*yr+(male?5:-161));
+  const tdee=Math.round(bmr*1.55);          // 3-5 entrenos/sem ≈ moderado
+  const surplus=tdee+300;                    // superávit magro para hipertrofia
+  const prot=Math.round(kg*2.0), protLo=Math.round(kg*1.6), protHi=Math.round(kg*2.2);
+  const fat=Math.round(kg*0.9);
+  const carbs=Math.max(0,Math.round((surplus-(prot*4+fat*9))/4));
+  return {kg,bmr,tdee,surplus,prot,protLo,protHi,fat,carbs};
+}
 function renderNutri(){
   const el=document.getElementById('v-nutri');
   let html=sectionHead('Nutrición','meal');
+  // ---- objetivo para ganar músculo (calculado del perfil) ----
+  const mt=muscleTargets();
+  if(mt){
+    html+=`<div class="card mtcard"><h3>🏋️ Objetivo para ganar músculo</h3>
+      <div class="mt-grid">
+        <div class="mt-big"><div class="mt-n">${mt.prot}<small>g</small></div><div class="mt-l">Proteína / día</div><div class="mt-sub">rango ${mt.protLo}–${mt.protHi} g</div></div>
+        <div class="mt-big"><div class="mt-n">${mt.surplus.toLocaleString('es-AR')}<small>kcal</small></div><div class="mt-l">Calorías / día</div><div class="mt-sub">mantenimiento ${mt.tdee.toLocaleString('es-AR')} + 300</div></div>
+      </div>
+      <div class="mt-macros">
+        <span class="mt-chip"><b>${mt.prot}g</b> proteína</span>
+        <span class="mt-chip"><b>${mt.carbs}g</b> carbos</span>
+        <span class="mt-chip"><b>${mt.fat}g</b> grasas</span>
+        <span class="mt-chip alt"><b>5g</b> creatina/día</span>
+      </div>
+      <div class="small muted" style="margin-top:10px;line-height:1.5">Para ${mt.kg} kg. Repartí la proteína en 3-4 comidas de ~${Math.round(mt.prot/3.5)} g. Si subís más de ~0,3 kg/sem, bajá un poco las calorías.</div></div>`;
+  } else {
+    html+=`<div class="card" onclick="openProfile()" style="cursor:pointer;border-color:rgba(255,90,54,.3)">
+      <h3>🏋️ Activá tu plan de proteína y calorías</h3>
+      <div class="small muted" style="line-height:1.5">Cargá tu <b>peso y altura</b> y el centro calcula tu objetivo diario exacto de proteína, calorías y macros para ganar músculo. Tocá para completar el perfil →</div></div>`;
+  }
   const items=S.nutrition.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const today=todayISO();
   const water=items.filter(x=>x.date===today).reduce((s,x)=>s+(+x.water||0),0);
