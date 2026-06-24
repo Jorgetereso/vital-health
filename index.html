@@ -256,6 +256,38 @@
   .mt-chip{font-size:11.5px;padding:6px 11px;border-radius:8px;background:rgba(240,237,230,.05);border:1px solid rgba(240,237,230,.08)}
   .mt-chip b{font-family:var(--grot);font-weight:800}
   .mt-chip.alt{background:rgba(255,90,54,.1);border-color:rgba(255,90,54,.25)}
+  /* ---- watchlist / comparador / supp-map ---- */
+  .wl-row{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid rgba(240,237,230,.06)}
+  .wl-row:first-of-type{border-top:0}
+  .wl-mk{flex:0 0 auto}.wl-mk b{font-size:13px}
+  .wl-tx{font-size:11.5px;color:var(--mut);text-align:right;line-height:1.45}
+  .wl-exp{color:var(--cream)}
+  /* ---- gym volume ---- */
+  .vol-row{display:flex;align-items:center;gap:10px;padding:6px 0}
+  .vol-name{flex:0 0 92px;font-size:12px;font-weight:600}
+  .vol-bar{position:relative;flex:1;height:14px;border-radius:5px;background:rgba(240,237,230,.06);overflow:hidden}
+  .vol-zone{position:absolute;left:45.4%;right:9%;top:0;bottom:0;background:rgba(90,209,126,.15);border-left:1px solid rgba(90,209,126,.4);border-right:1px solid rgba(90,209,126,.4)}
+  .vol-fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--coral)}
+  .vol-fill.ok{background:var(--good)}.vol-fill.low{background:var(--warn)}.vol-fill.high{background:var(--coral)}
+  .vol-n{flex:0 0 auto;font-family:var(--mono);font-size:12px;font-weight:700;width:24px;text-align:right}
+  .vol-n.ok{color:var(--good)}.vol-n.low{color:var(--warn)}.vol-n.high{color:var(--coral)}
+  /* ---- screenings ---- */
+  .scr-row{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px solid rgba(240,237,230,.06)}
+  .scr-row:first-of-type{border-top:0}
+  .scr-ic{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .scr-ic.done{background:rgba(90,209,126,.15);color:var(--good)}
+  .scr-ic.todo{background:rgba(240,237,230,.06);color:var(--dim)}
+  .scr-t{font-size:13.5px;font-weight:600}
+  .scr-d{font-size:11.5px;color:var(--mut);line-height:1.45;margin-top:2px}
+  /* ---- briefing ---- */
+  .bf-card{background:linear-gradient(135deg,rgba(255,90,54,.06),rgba(240,237,230,.02))}
+  .bf-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .bf-chip{font-family:var(--mono);font-size:10.5px;padding:5px 10px;border-radius:7px;cursor:pointer;
+    background:rgba(255,90,54,.1);border:1px solid rgba(255,90,54,.25);color:var(--cream)}
+  .bf-foco{margin-top:10px;line-height:1.5}
+  /* ---- automation guide ---- */
+  .ag-step{background:rgba(240,237,230,.04);border-radius:10px;padding:11px 13px;margin-bottom:9px;font-size:12.5px;line-height:1.5;color:var(--mut)}
+  .ag-step b{color:var(--cream)}
 </style>
 </head>
 <body>
@@ -465,9 +497,22 @@ function buildInsights(){
   const bt=S.appointments.find(a=>a.status==='upcoming'&&/sangre|an[áa]lisis|test|control/i.test(((a.title||'')+' '+(a.type||''))));
   if(bt){const d=daysUntil(bt.date);if(d!=null&&d>=0&&d<=45) add('comparador','📊','Tu próximo análisis va a ser comparable',
     `En ${d} día(s) te hacés el control. Cuando lleguen los resultados los comparo marcador por marcador contra tu base de 2025 para ver exactamente qué se acomodó.`,'labs');}
+  // recordatorio predictivo: labs por cumplir un año sin control agendado
+  const labDate=S.labs.map(l=>l.date).filter(Boolean).sort().pop();
+  if(labDate&&!bt){const mo=Math.round((new Date(todayISO())-new Date(labDate))/2629800000);
+    if(mo>=11) add('labs-due','📅','Tus análisis están por cumplir un año',`Hace ${mo} meses del último control. Conviene repetir el análisis anual — decime y te agendo el turno con su evento privado.`,'appts');}
   return out.filter(i=>!((S.meta&&S.meta.dismissed)||[]).includes(i.id));
 }
 function dismissInsight(id){ if(!S.meta.dismissed)S.meta.dismissed=[]; S.meta.dismissed.push(id); save(); renderToday(); toast('Listo, no lo muestro más'); }
+function openAutoGuide(){
+  openSheet(`<h2>Automatizar tu salud</h2>
+  <div class="desc">Para que sueño, FC, HRV, peso y pasos entren <b>solos</b>, sin que cargues nada a mano.</div>
+  <div class="ag-step"><b>1 · Conseguí un reloj o anillo</b><br>Apple Watch Ultra 2 u Oura Ring 4 — todo va a Apple Health en tu iPhone 16 Pro. (Están en Consejos → dispositivos.)</div>
+  <div class="ag-step"><b>2 · Instalá "Health Auto Export" (iOS)</b><br>App que exporta tu Apple Health a JSON automáticamente.</div>
+  <div class="ag-step"><b>3 · Atajo de iOS a las 8:00</b><br>Una Automatización diaria que exporta tu noche y deja el JSON en el portapapeles; después tocás <b>⌚ Apple Health</b> acá y pegás. Dos toques.</div>
+  <div class="ag-step"><b>4 · 100% automático (próximo paso)</b><br>Con Cloudflare, el iPhone escribe directo y la app lee sola — sin pegar nada. Te lo dejo listo cuando quieras acceso desde el celu.</div>
+  <button class="btn" style="margin-top:14px;width:100%" onclick="openHealthImport()">⌚ Importar ahora</button>`);
+}
 
 /* ============================================================
    SECTIONS
@@ -511,6 +556,7 @@ function renderToday(){
   const el=document.getElementById('v-today');
   const hs=healthScore(); const score=hs.score;
   const insights=buildInsights();
+  const wb=weeklyBriefing();
   const p=S.profile; const a=age(p.birthDate);
   const sinceLast=(arr,key='date')=>{const ds=arr.map(x=>daysUntil(x[key])).filter(d=>d!=null);return ds.length?-Math.max(...ds):null;};
   const nudges=[];
@@ -554,6 +600,11 @@ function renderToday(){
       </div>
     </div>
   </div>
+
+  <div class="card bf-card"><h3>Resumen de la semana</h3>
+    <div class="small" style="line-height:1.6">${wb.body}</div>
+    ${wb.chips?`<div class="bf-chips">${wb.chips}</div>`:''}
+    <div class="small muted bf-foco">${wb.foco}</div></div>
 
   ${insights.length?`<div class="card"><h3>El centro detectó <span class="badge">${insights.length}</span></h3>
     ${insights.map(i=>`<div class="insight" onclick="${i.link==='__profile'?'openProfile()':`show('${i.link}')`}">
@@ -699,6 +750,28 @@ function renderLabs(){
   // ---- resumen + valores a seguir ----
   html+=`<div class="card"><h3>Tu análisis <span class="badge">${fmtDate(dates[dates.length-1])}</span></h3>
     <div class="small" style="line-height:1.6">${S.labs.length-flagged.length} de ${S.labs.length} valores <b style="color:var(--good)">en rango</b>.${flagged.length?` ${flagged.length} a seguir: ${flagged.map(f=>`<span class="pill ${flagClass(f.flag)}">${esc(f.marker)} ${esc(f.value)}</span>`).join(' ')}` :' Todo perfecto.'}</div></div>`;
+  // ---- radar de sistemas ----
+  const sysList=[...new Set(S.labs.map(r=>r.panel||'Otros'))];
+  const axes=sysList.map(sys=>{const a=S.labs.filter(r=>(r.panel||'Otros')===sys);const ok=a.filter(r=>r.flag!=='high'&&r.flag!=='low').length;return {label:(SYS_VERDICT[sys]||sys).split(' ')[0],val:a.length?ok/a.length:1};});
+  html+=`<div class="card"><h3>Mapa de sistemas</h3><canvas id="lradar" height="240"></canvas>
+    <div class="small muted" style="text-align:center;margin-top:4px">Cuanto más lleno el polígono, mejor. Los puntos ámbar marcan los sistemas con algo a revisar.</div></div>`;
+  // ---- comparador 2025 → nuevo análisis (se enciende solo cuando cargo los nuevos labs) ----
+  const cmp=comparatorRows();
+  if(cmp.length){
+    const better=cmp.filter(c=>c.good===true).length, worse=cmp.filter(c=>c.good===false).length;
+    html+=`<div class="card"><h3>Comparación con tu base anterior</h3>
+      <div class="small muted" style="margin-bottom:8px">${better} mejoraron · ${worse} a vigilar.</div>
+      ${cmp.map(c=>`<div class="wl-row"><div class="wl-mk"><b>${esc(c.m)}</b></div>
+        <div class="wl-tx">${esc(c.a.value)} → <b>${esc(c.b.value)}</b> ${c.good===true?'<span style="color:var(--good)">▲ mejoró</span>':c.good===false?'<span style="color:var(--bad)">▼ vigilar</span>':'■ igual'}</div></div>`).join('')}</div>`;
+  }
+  // ---- watchlist de los valores a seguir + qué los trata ----
+  if(flagged.length){
+    html+=`<div class="card"><h3>Seguimiento de tus valores <span class="badge">vs próximo análisis</span></h3>
+      <div class="small muted" style="margin-bottom:10px">Qué esperamos que cambie y qué lo está tratando. Cuando cargue tus labs nuevos, acá ves el antes→después.</div>
+      ${flagged.map(f=>{const t=SUPP_TARGET[f.marker]||{supp:'preguntar al médico',expect:''};
+        return `<div class="wl-row"><div class="wl-mk"><b>${esc(f.marker)}</b> <span class="pill ${flagClass(f.flag)}">${esc(f.value)} ${esc(f.unit||'')}</span></div>
+          <div class="wl-tx">${esc(t.supp)} ${t.expect?`· <span class="wl-exp">${esc(t.expect)}</span>`:''}</div></div>`;}).join('')}</div>`;
+  }
   // ---- por sistema (usa panel), colapsable ----
   const bySys={}; S.labs.forEach(r=>{(bySys[r.panel||'Otros']||=[]).push(r);});
   Object.entries(bySys).forEach(([sys,arr])=>{
@@ -722,6 +795,19 @@ function renderLabs(){
       </summary><div class="sysbody">${rows}</div></details>`;
   });
   el.innerHTML=html;
+  drawRadar('lradar',axes);
+}
+function comparatorRows(){
+  const byM={}; S.labs.forEach(r=>{(byM[r.marker]||=[]).push(r);});
+  const rows=[];
+  Object.entries(byM).forEach(([m,arr])=>{
+    if(arr.length<2)return; arr.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    const a=arr[arr.length-2],b=arr[arr.length-1],dv=+b.value-+a.value;
+    if(Math.abs(dv)<1e-9){rows.push({m,a,b,good:null});return;}
+    const gd=GOOD_DIR[m]; const good=gd?(gd==='down'?dv<0:dv>0):null;
+    rows.push({m,a,b,dv,good});
+  });
+  return rows;
 }
 function spark(id,vals,last,H){
   const cv=document.getElementById(id);if(!cv)return;H=H||120;
@@ -738,12 +824,150 @@ function spark(id,vals,last,H){
   if(H>60)vals.forEach((v,i)=>{x.fillStyle='#ff5a36';x.beginPath();x.arc(px(i),py(v),3,0,7);x.fill();});
 }
 
+/* ============================================================
+   ANALYTICS & INTELLIGENCE (sueño · gym · labs · prevención)
+   ============================================================ */
+// dirección "buena" de cada marcador (para el comparador 2025→nuevo)
+const GOOD_DIR={'Eosinófilos':'down','Cortisol':'down','Monocitos':'up','Manganeso sérico':'up','Vitamina B12':'up','Colesterol HDL':'up','Colesterol LDL':'down','Triglicéridos':'down','Apolipoproteína B':'down','PCR ultrasensible':'down','Glucemia':'down','Hemoglobina glicosilada (HbA1c)':'down','HOMA-IR':'down','Vitamina D (25-OH)':'up'};
+// marcador flagged → qué suplemento lo trata + qué esperamos
+const SUPP_TARGET={
+  'Manganeso sérico':{supp:'Manganeso 5 mg (multivitamínico)',expect:'⬆ subir'},
+  'Eosinófilos':{supp:'Quercetina (antihistamínico, blend antiox.)',expect:'⬇ bajar si es alergia'},
+  'Cortisol':{supp:'Magnesio L-treonato + mejor sueño',expect:'⬇ bajar'},
+  'Monocitos':{supp:'— sin suplemento directo',expect:'preguntar al médico'},
+  'Vitamina D (25-OH)':{supp:'Vitamina D3 10.000 UI + K2',expect:'⬆ hacia 50-60'},
+};
+// ----- SUEÑO -----
+function sleepStats(){
+  const it=S.sleep.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const recent=it.slice(-14).map(x=>+x.hours).filter(h=>!isNaN(h));
+  if(!recent.length) return null;
+  const tgt=8, avg=recent.reduce((s,h)=>s+h,0)/recent.length;
+  const debt=recent.reduce((s,h)=>s+Math.max(0,tgt-h),0);
+  const sd=Math.sqrt(recent.reduce((s,h)=>s+(h-avg)**2,0)/recent.length);
+  const consistency=Math.max(0,Math.min(100,Math.round(100-sd*22)));
+  return {avg:+avg.toFixed(1),debt:+debt.toFixed(1),consistency,n:recent.length,tgt,sd:+sd.toFixed(1)};
+}
+function idealBedtime(wake){ // wake 'HH:MM' → bedtimes para 5-6 ciclos
+  const [h,m]=(wake||'07:00').split(':').map(Number); const wm=h*60+m;
+  return [6,5].map(c=>{let t=((wm-(c*90+15))%1440+1440)%1440;return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')+` (${c} ciclos)`;});
+}
+// ----- GYM -----
+const MUSCLE_MAP=[
+  [/peso muerto|deadlift|femoral|hip ?thrust|gl[uú]teo|curl femoral|rumano|rdl/i,'Posterior/Glúteo'],
+  [/sentadilla|squat|prensa|leg ?press|estoc|zancada|b[uú]lgar|hack|cu[aá]drice|extensi[oó]n.*cuad/i,'Cuádriceps'],
+  [/gemelo|pantorrilla|calf|sóleo|soleo/i,'Gemelos'],
+  [/press banca|banca|pecho|chest|apertura|fly|pec|peck/i,'Pecho'],
+  [/dominada|pull ?up|jal[oó]n|remo|row|espalda|pull|dorsal/i,'Espalda'],
+  [/press militar|hombro|shoulder|laterales|deltoide|overhead|arnold/i,'Hombros'],
+  [/b[ií]ceps|curl(?!.*femoral)|predicador/i,'Bíceps'],
+  [/tr[ií]ceps|fondos|polea.*tri|push.?down|copa|frances/i,'Tríceps'],
+  [/abdom|core|plancha|crunch|rueda|ab ?wheel|elevaci[oó]n.*pierna/i,'Core'],
+];
+function muscleOf(n){n=n||'';for(const[re,m]of MUSCLE_MAP)if(re.test(n))return m;return 'Otros';}
+function gymAnalytics(){
+  const sessions=(S.gym&&S.gym.sessions)||{};
+  const dates=Object.keys(sessions).sort();
+  if(!dates.length) return null;
+  const ref=dates[dates.length-1];
+  const within7=d=>{const diff=(new Date(ref+'T00:00')-new Date(d+'T00:00'))/86400000;return diff>=0&&diff<7;};
+  // volumen semanal por músculo (series efectivas done)
+  const vol={};
+  dates.filter(within7).forEach(d=>{const s=sessions[d];Object.values(s.exercises||{}).forEach(e=>{
+    const done=(e.sets||[]).filter(x=>x.done).length; if(done) vol[muscleOf(e.name)]=(vol[muscleOf(e.name)]||0)+done;});});
+  const volume=Object.entries(vol).map(([muscle,sets])=>({muscle,sets})).sort((a,b)=>b.sets-a.sets);
+  // progresión por ejercicio (e1RM Epley del top set)
+  const byEx={};
+  dates.forEach(d=>{const s=sessions[d];Object.values(s.exercises||{}).forEach(e=>{
+    const sets=(e.sets||[]).filter(x=>x.done&&+x.w>0&&+x.r>0);
+    if(!sets.length)return; const top=Math.max(...sets.map(x=>+x.w*(1+(+x.r)/30)));
+    (byEx[e.name||'Ej']||=[]).push({date:d,e1rm:Math.round(top)});});});
+  const progression=Object.entries(byEx).filter(([,p])=>p.length>=2).map(([name,p])=>{
+    p.sort((a,b)=>a.date.localeCompare(b.date));
+    const first=p[0].e1rm,last=p[p.length-1].e1rm,delta=last-first;
+    const tail=p.slice(-3).map(x=>x.e1rm); const stalled=tail.length>=3&&Math.max(...tail)<=tail[0];
+    return {name,points:p,first,last,delta,stalled};
+  }).sort((a,b)=>b.points.length-a.points.length).slice(0,8);
+  return {volume,progression,weekSessions:dates.filter(within7).length};
+}
+// ----- PREVENCIÓN / TAMIZAJES por edad -----
+function screenings(){
+  const p=S.profile, yr=age(p.birthDate)||42, male=p.sex!=='Femenino';
+  const apts=S.appointments||[], labs=S.labs||[];
+  const has=re=>apts.some(a=>re.test((a.title||'')+' '+(a.type||'')));
+  const labDate=(labs.map(l=>l.date).sort().pop())||null;
+  const monthsSince=d=>d?Math.round((new Date(todayISO())-new Date(d))/2629800000):null;
+  const out=[];
+  out.push({t:'Colonoscopía',int:'cada ~10 años (antes si hay hallazgos)',
+    done:has(/colono/i),detail:has(/colono/i)?'Hecha 25/06/2026 → próxima ~2036 si sale limpia':'Recomendada desde los 45-50'});
+  if(male)out.push({t:'PSA (próstata)',int:'anual desde los 45-50',
+    done:labs.some(l=>/psa/i.test(l.marker)),detail:labs.some(l=>/psa/i.test(l.marker))?'Hecho 2025 (0.64, normal)':'Pedir en el próximo análisis'});
+  out.push({t:'Perfil lipídico + ApoB',int:'cada 1-2 años',done:labs.some(l=>/apolipo|colesterol/i.test(l.marker)),detail:labDate?`Último: ${fmtDate(labDate)}`:'—'});
+  out.push({t:'Glucemia / HbA1c',int:'cada 1-3 años',done:labs.some(l=>/glucemia|hba1c|glicosilada/i.test(l.marker)),detail:'HbA1c 5.5% (excelente)'});
+  out.push({t:'Presión arterial',int:'anual',done:(S.vitals||[]).some(v=>v.type==='bp_sys'),detail:(S.vitals||[]).some(v=>v.type==='bp_sys')?'Medida':'Sin registro — la trae el tensiómetro/reloj'});
+  out.push({t:'Control clínico anual',int:'anual desde los 40',done:has(/cl[ií]nic|chequeo|anual|control/i),detail:has(/cl[ií]nic|chequeo|anual|control/i)?'Agendado':'Conviene agendar uno'});
+  out.push({t:'Chequeo de piel (dermatología)',int:'cada 1-2 años',done:has(/derma|piel|lunar/i),detail:has(/derma|piel/i)?'Hecho':'No registrado'});
+  out.push({t:'Salud dental',int:'cada 6-12 meses',done:has(/dent|odont/i),detail:has(/dent|odont/i)?'Hecho':'No registrado'});
+  return {yr,items:out};
+}
+// ----- BRIEFING semanal -----
+function weeklyBriefing(){
+  const p=S.profile, frag=[];
+  const ga=gymAnalytics();
+  if(ga) frag.push(`Entrenaste <b>${ga.weekSessions}</b> ${ga.weekSessions===1?'vez':'veces'} esta semana`);
+  const ss=sleepStats();
+  if(ss) frag.push(`dormiste <b>${ss.avg} h</b> promedio (deuda ${ss.debt} h)`);
+  const next=(S.appointments||[]).filter(a=>a.status==='upcoming').sort((a,b)=>(a.date||'').localeCompare(b.date||''))[0];
+  let chips='';
+  if(next){const d=daysUntil(next.date);chips=`<span class="bf-chip" onclick="show('appts')">${esc(next.title)} ${d===0?'hoy':d===1?'mañana':d>0?'en '+d+' días':''}</span>`;}
+  const bt=(S.appointments||[]).find(a=>a.status==='upcoming'&&/sangre|an[áa]lisis/i.test((a.title||'')));
+  if(bt){const d=daysUntil(bt.date);if(d!=null&&d>=0)chips+=`<span class="bf-chip" onclick="show('labs')">Análisis comparable en ${d} d</span>`;}
+  const body = frag.length? frag.join(', ')+'.' : 'Todavía no hay datos de la semana. Conectá tu reloj y sincronizá GymBro y acá te resumo todo solo.';
+  const foco = ss&&ss.avg<7.5 ? 'Foco de la semana: <b>dormir 30-45 min más</b> — es tu mayor palanca para músculo y para bajar el cortisol.'
+    : (!S.profile.weightKg ? 'Foco: cargá tu <b>peso</b> para activar tus objetivos de proteína.' : 'Foco: sostené la <b>sobrecarga progresiva</b> en los básicos.');
+  return {body,chips,foco};
+}
+function drawRadar(id,axes){
+  const cv=document.getElementById(id);if(!cv)return;
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=240;cv.width=W*dpr;cv.height=H*dpr;
+  const x=cv.getContext('2d');x.scale(dpr,dpr);
+  const cx=W/2,cy=H/2,R=Math.min(W,H)/2-34,N=axes.length;
+  const pt=(i,r)=>[cx+Math.cos(-Math.PI/2+i*2*Math.PI/N)*r,cy+Math.sin(-Math.PI/2+i*2*Math.PI/N)*r];
+  // grid
+  x.strokeStyle='rgba(240,237,230,.1)';x.fillStyle='rgba(240,237,230,.34)';x.font='9px monospace';
+  [0.33,0.66,1].forEach(g=>{x.beginPath();axes.forEach((a,i)=>{const[px,py]=pt(i,R*g);i?x.lineTo(px,py):x.moveTo(px,py);});x.closePath();x.stroke();});
+  axes.forEach((a,i)=>{const[px,py]=pt(i,R);x.strokeStyle='rgba(240,237,230,.1)';x.beginPath();x.moveTo(cx,cy);x.lineTo(px,py);x.stroke();
+    const[lx,ly]=pt(i,R+16);x.textAlign=lx<cx-5?'right':lx>cx+5?'left':'center';x.fillStyle='rgba(240,237,230,.56)';x.fillText(a.label,lx,ly+3);});
+  // value polygon
+  x.beginPath();axes.forEach((a,i)=>{const[px,py]=pt(i,R*Math.max(0.06,a.val));i?x.lineTo(px,py):x.moveTo(px,py);});x.closePath();
+  x.fillStyle='rgba(255,90,54,.18)';x.fill();x.strokeStyle='#ff5a36';x.lineWidth=2;x.stroke();
+  axes.forEach((a,i)=>{const[px,py]=pt(i,R*Math.max(0.06,a.val));x.fillStyle=a.val<0.999?'#f5b13d':'#5ad17e';x.beginPath();x.arc(px,py,3,0,7);x.fill();});
+}
+
 /* ---------- MEDS ---------- */
 function renderMeds(){
   const el=document.getElementById('v-meds');
   let html=sectionHead('Suplementos','supp');
   const items=S.supplements;
   if(!items.length){el.innerHTML=html+emptyCard('No hay suplementos cargados.<br>Tocá <b>+ Agregar</b> y decime qué tomás (nombre, dosis, horario).');return;}
+  // ---- mapa: qué marcador apunta cada suplemento + estado actual ----
+  const SUPP_MAP=[
+    [/manganeso/i,['Manganeso sérico']],[/vitamina d|d3|colecalcif/i,['Vitamina D (25-OH)']],
+    [/zinc/i,['Zinc']],[/selenio/i,['Selenio']],[/cobre/i,['Cobre']],[/b12|cobalam/i,['Vitamina B12']],
+    [/magnesio|treonato/i,['Cortisol']],[/omega|epa|dha|pescado/i,['Triglicéridos','PCR ultrasensible']],
+    [/antiox|nac|quercetina|silimarina|lipoico|msm|cardo/i,['Eosinófilos','PCR ultrasensible','TGP (ALT)']],
+  ];
+  const stEl=r=>r?`<span class="pill ${flagClass(r.flag)}">${esc(r.value)}</span>`:'';
+  const mapRows=items.filter(i=>i.active!==false).map(s=>{
+    const txt=((s.name||'')+' '+(s.purpose||'')+' '+(s.notes||''));
+    const mks=[...new Set(SUPP_MAP.filter(([re])=>re.test(txt)).flatMap(([,m])=>m))];
+    if(!mks.length)return '';
+    return `<div class="wl-row"><div class="wl-mk"><b>${esc(s.name)}</b></div>
+      <div class="wl-tx">${mks.map(m=>{const r=labFind(m);return `${esc(m.split(' ')[0])} ${stEl(r)}`;}).join(' · ')}</div></div>`;
+  }).filter(Boolean).join('');
+  let html2='';
+  if(mapRows) html2=`<div class="card"><h3>🎯 Qué apunta cada suplemento</h3>
+    <div class="small muted" style="margin-bottom:9px">Tu fórmula cruzada con tus marcadores reales. El pill muestra el último valor.</div>${mapRows}</div>`;
   const order=['morning','pre-workout','noon','post-workout','evening','night'];
   const label={morning:'☀️ Mañana','pre-workout':'⚡ Pre-entreno',noon:'🍽️ Mediodía','post-workout':'🥤 Post-entreno',evening:'🌆 Tarde',night:'🌙 Noche'};
   const active=items.filter(i=>i.active!==false),groups={};
@@ -753,7 +977,7 @@ function renderMeds(){
     <div style="text-align:right;display:flex;align-items:center;gap:8px"><div><div>${esc(s.dose||'')}</div>${s.withFood?'<span class="badge">con comida</span>':''}</div>${delBtn('supplements',s.id)}</div></div>`).join('')}</div>`).join('');
   const inact=items.filter(i=>i.active===false);
   if(inact.length)html+=`<div class="card"><h3>Discontinuados</h3>${inact.map(s=>`<div class="row"><div class="item-title muted">${esc(s.name)}</div>${delBtn('supplements',s.id)}</div>`).join('')}</div>`;
-  el.innerHTML=html;
+  el.innerHTML=html2+html;
 }
 
 /* ---------- NUTRITION ---------- */
@@ -812,13 +1036,23 @@ function renderSleep(){
   let html=`${kicker()}<div class="sectionhead"><h2>Sueño</h2>
     <button class="btn sm" onclick="openHealthImport()">⌚ Conectar / importar</button></div>`;
   const items=S.sleep.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-  if(!items.length){el.innerHTML=html+emptyCard('Tu sueño llega <b>automáticamente</b> desde tu reloj/anillo.<br>Tocá <b>⌚ Conectar / importar</b> para traerlo desde Apple Health.');return;}
-  const last=items[items.length-1];
-  const avg=(items.slice(-7).reduce((s,x)=>s+(+x.hours||0),0)/Math.min(7,items.length)).toFixed(1);
-  html+=`<div class="grid cols3"><div class="stat"><div class="k">Anoche</div><div class="v">${esc(last.hours)} <small>h</small></div></div>
-    <div class="stat"><div class="k">Prom. 7 días</div><div class="v">${avg} <small>h</small></div></div>
-    <div class="stat"><div class="k">Registros</div><div class="v">${items.length}</div></div></div>`;
-  html+='<div class="card"><h3>Últimos días</h3><canvas id="cslp" height="120"></canvas></div>';
+  // ---- horario ideal (no necesita datos) ----
+  const beds=idealBedtime('07:00');
+  html+=`<div class="card"><h3>🌙 Tu objetivo de sueño</h3>
+    <div class="small" style="line-height:1.6">Meta: <b>7,5–9 h</b> reales y horario parejo (también el finde). Es tu mayor palanca para ganar músculo y para bajar el cortisol (que te salió algo alto).</div>
+    <div class="small muted" style="margin-top:9px">Si te levantás 07:00, acostate cerca de <b>${beds.join('</b> o <b>')}</b> para cerrar ciclos completos.</div></div>`;
+  const ss=sleepStats();
+  if(ss){
+    const cgrade=ss.consistency>=80?'good':ss.consistency>=55?'warn':'bad';
+    html+=`<div class="grid cols3">
+      <div class="stat"><div class="k">Prom. (${ss.n}d)</div><div class="v">${ss.avg} <small>h</small></div></div>
+      <div class="stat"><div class="k">Deuda</div><div class="v" style="color:${ss.debt>10?'var(--bad)':'var(--cream)'}">${ss.debt} <small>h</small></div></div>
+      <div class="stat"><div class="k">Consistencia</div><div class="v" style="color:var(--${cgrade==='good'?'good':cgrade==='warn'?'warn':'bad'})">${ss.consistency}</div></div></div>`;
+    html+='<div class="card"><h3>Últimos días</h3><canvas id="cslp" height="120"></canvas></div>';
+  } else {
+    html+=emptyCard('Cuando conectes tu reloj/anillo, acá vas a ver tu <b>promedio</b>, tu <b>deuda de sueño</b> acumulada y un <b>score de consistencia</b>.<br>Tocá <b>⌚ Conectar / importar</b>.');
+    el.innerHTML=html;return;
+  }
   html+='<div class="card"><h3>Detalle</h3>'+items.slice().reverse().slice(0,20).map(s=>`<div class="row"><div>
     <div class="item-title">${esc(s.hours)} h ${s.quality?'· '+'★'.repeat(Math.max(0,Math.min(5,+s.quality))):''}</div>
     <div class="small muted">${esc(s.note||'')}</div></div><div style="text-align:right"><div class="date">${fmtDate(s.date)}</div>${delBtn('sleep',s.id)}</div></div>`).join('')+'</div>';
@@ -831,13 +1065,29 @@ function renderGym(){
   const el=document.getElementById('v-gym');
   const g=S.gym||{},sessions=g.sessions||{},sum=g.summary||{};
   let html=`${kicker()}<div class="sectionhead"><h2>Gimnasio</h2>
-    <a class="btn sm ghost" href="https://jorgetereso.github.io/gymbro/" target="_blank">GymBro ↗</a></div>`;
+    <div style="display:flex;gap:7px"><button class="btn sm" onclick="openGymImport()">↻ Sincronizar</button>
+    <a class="btn sm ghost" href="https://jorgetereso.github.io/gymbro/" target="_blank">GymBro ↗</a></div></div>`;
   html+=`<div class="grid cols3">
     <div class="stat"><div class="k">Último entreno</div><div class="v" style="font-size:17px">${sum.lastSession?fmtDate(sum.lastSession):'—'}</div></div>
     <div class="stat"><div class="k">Esta semana</div><div class="v">${sum.weeklyCount||0} <small>entrenos</small></div></div>
     <div class="stat"><div class="k">Racha</div><div class="v">${sum.streak||0} <small>días</small></div></div></div>`;
   const dates=Object.keys(sessions).sort().reverse();
-  if(!dates.length){el.innerHTML=html+emptyCard('Sin entrenos sincronizados.<br>En GymBro: <b>Ajustes → Exportar</b>, copiá el texto y pegalo en <b>Ajustes → Importar GymBro</b>. O contame qué entrenaste hoy.');return;}
+  if(!dates.length){el.innerHTML=html+emptyCard('Sin entrenos sincronizados.<br>En GymBro: <b>Ajustes → Exportar</b>, copiá el texto y tocá <b>↻ Sincronizar</b> acá arriba.<br><span class="dim">Apenas sincronices, calculo tu volumen semanal por músculo y tu progresión de fuerza.</span>');return;}
+  // ---- volumen semanal + progresión ----
+  const ga=gymAnalytics();
+  if(ga){
+    html+=`<div class="card"><h3>Volumen de la semana <span class="badge">series efectivas</span></h3>
+      <div class="small muted" style="margin-bottom:11px">Para hipertrofia apuntá a 10-20 series por grupo. La banda verde es la zona objetivo.</div>
+      ${ga.volume.length?ga.volume.map(v=>{const pc=Math.min(100,v.sets/22*100),zone=v.sets<10?'low':v.sets>20?'high':'ok';
+        return `<div class="vol-row"><div class="vol-name">${v.muscle}</div>
+          <div class="vol-bar"><div class="vol-zone"></div><div class="vol-fill ${zone}" style="width:${pc}%"></div></div>
+          <div class="vol-n ${zone}">${v.sets}</div></div>`;}).join(''):'<div class="empty">Sin series marcadas esta semana.</div>'}</div>`;
+    if(ga.progression.length) html+=`<div class="card"><h3>Progresión de fuerza <span class="badge">1RM estimado</span></h3>
+      ${ga.progression.map(p=>`<div class="row"><div><div class="item-title">${esc(p.name)}</div>
+        <div class="small muted">${p.first} → ${p.last} kg est. · ${p.points.length} sesiones</div></div>
+        <div style="text-align:right">${p.stalled?'<span class="pill low">estancado</span>':p.delta>0?`<span class="pill acc">▲ +${p.delta} kg</span>`:p.delta<0?`<span class="pill low">▼ ${p.delta} kg</span>`:'<span class="pill">igual</span>'}</div></div>`).join('')}
+      <div class="small muted" style="margin-top:9px">Estancado = sin subir el top set en 3+ sesiones → probá sumar reps o +2,5 kg.</div></div>`;
+  }
   const T={push:'Push',pull:'Pull',legs:'Legs',pump:'Pump & Core',full:'Full Body',temp:'Custom'};
   html+=dates.slice(0,30).map(d=>{const s=sessions[d],exs=Object.values(s.exercises||{});
     return `<div class="card"><details ${dates[0]===d?'open':''}><summary class="row" style="border:0;padding:0">
@@ -884,6 +1134,12 @@ function renderStudies(){
 function renderAppts(){
   const el=document.getElementById('v-appts');
   let html=sectionHead('Turnos','appt');
+  // ---- tamizajes por edad ----
+  const sc=screenings();
+  html+=`<div class="card"><h3>🩺 Tamizajes para tu edad <span class="badge">${sc.yr} años</span></h3>
+    <div class="small muted" style="margin-bottom:11px">Qué controles te corresponden y cuándo. Orientativo — confirmá conducta con tu médico.</div>
+    ${sc.items.map(s=>`<div class="scr-row"><div class="scr-ic ${s.done?'done':'todo'}">${s.done?'✓':'○'}</div>
+      <div class="scr-main"><div class="scr-t">${s.t}</div><div class="scr-d">${esc(s.detail)} <span class="dim">· ${esc(s.int)}</span></div></div></div>`).join('')}</div>`;
   const items=S.appointments.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!items.length){el.innerHTML=html+emptyCard('No hay turnos.<br>Tocá <b>+ Agregar</b> o pasame la fecha por el chat; lo agendo y creo el evento <b>privado</b> en tu Google Calendar.');return;}
   const up=items.filter(a=>a.status==='upcoming'),done=items.filter(a=>a.status!=='upcoming');
@@ -965,6 +1221,7 @@ function renderSettings(){
     <p class="small muted" style="margin:0 0 13px;line-height:1.6">Tus datos viven en este navegador. Exportá para respaldar o para pasármelos por el chat. El agente puede actualizar los archivos del proyecto y vos los traés con “Actualizar desde archivos”.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn sm" onclick="openHealthImport()">⌚ Apple Health</button>
+      <button class="btn sm ghost" onclick="openAutoGuide()">📲 Automatizar</button>
       <button class="btn sm ghost" onclick="exportData()">⬇ Exportar</button>
       <button class="btn sm ghost" onclick="copyData()">⧉ Copiar</button>
       <button class="btn sm ghost" onclick="openImport()">⬆ Importar</button>
